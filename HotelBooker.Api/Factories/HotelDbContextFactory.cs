@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 
 namespace HotelBooker.Infrastructure;
 public class HotelDbContextFactory : IDesignTimeDbContextFactory<HotelDbContext>
@@ -17,7 +16,8 @@ public class HotelDbContextFactory : IDesignTimeDbContextFactory<HotelDbContext>
             .Build();
         string connectionString = configRoot.GetConnectionString("Default");
 
-        optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.UseSqlServer(connectionString,
+            b => b.MigrationsAssembly(typeof(HotelDbContext).Assembly.FullName));
 
 
         return new HotelDbContext(optionsBuilder.Options);

@@ -24,7 +24,7 @@ public class Hotel
     public string BookingRef { get; set; }
 
     // Leave these out till they are implemented into Entity Framework
-    //public ICollection<Room> Rooms { get; set; }
+    public ICollection<Room> Rooms { get; set; }
 
     //public ICollection<Booking> Bookings { get; set; }
 }

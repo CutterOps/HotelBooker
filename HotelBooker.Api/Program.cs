@@ -1,8 +1,10 @@
 using HotelBooker.Application.Hotels;
+using HotelBooker.Application.Seeding;
 using HotelBooker.Infrastructure;
 using HotelBooker.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System;
 
 namespace HotelBooker.Api
 {
@@ -17,17 +19,23 @@ namespace HotelBooker.Api
 
             builder.Services.AddDbContext<HotelDbContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(connectionString,
+                b => b.MigrationsAssembly(typeof(HotelDbContext).Assembly.FullName));
             });
 
             builder.Services.AddSerilog();
 
+            //#if DEBUG
+            builder.Services.AddScoped<ISeeder, Seeder>();
+
+            //#endif
             // NOTE: Optionally I could put all the services/interfaces into separate folders and use Reflection to automatically register them for Dependency Injection
             // Logger
 
             //
             // Repositories
             // 
+            
             builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 
 

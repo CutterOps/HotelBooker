@@ -11,14 +11,14 @@ public class Room
 
     public int RoomTypeId { get; set; }
 
-    public int HotelId { get; set; }
+    public Guid HotelId { get; set; }
 
-    [ForeignKey(nameof(RoomNumber))]
+    [ForeignKey(nameof(HotelId))]
     public Hotel Hotel { get; set; }
 
     [ForeignKey(nameof(RoomTypeId))]
     public RoomType RoomType { get; set; }
 
-    // Navigation property
-    public ICollection<Booking> Bookings { get; private set; } = new List<Booking>();
+    // Uncomment when I have bookings implemented
+    //public ICollection<Booking> Bookings { get; private set; } = new List<Booking>();
 }
