@@ -3,15 +3,15 @@
 namespace HotelBooker.Application.Hotels;
 public class HotelService : IHotelService
 {
-    private readonly IHotelService _hotelService;
+    private readonly IHotelRepository _hotelRepository;
 
-    public HotelService(IHotelService hotelService)
+    public HotelService(IHotelRepository hotelRepository)
     {
-        _hotelService = hotelService;
+        _hotelRepository = hotelRepository;
     }
     public async Task<List<HotelPreviewDto>> GetHotelPreviewsWithName(string name)
     {
-        var hotelPreviews = await _hotelService.GetHotelPreviewsWithName(name);
+        var hotelPreviews = await _hotelRepository.GetAllLikeName(name);
 
         // Return empty list if an error has occured
         if (hotelPreviews == null)
@@ -26,7 +26,7 @@ public class HotelService : IHotelService
             AddressLine1 = x.AddressLine1,
             City = x.City,
             PostalCode = x.PostalCode,
-            LowestPrice = x.LowestPrice
+            Country = x.Country
         }).ToList();
     }
 }

@@ -1,3 +1,9 @@
+using HotelBooker.Application.Hotels;
+using HotelBooker.Infrastructure;
+using HotelBooker.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+
 namespace HotelBooker.Api
 {
     public class Program
@@ -5,6 +11,32 @@ namespace HotelBooker.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+
+            var connectionString = builder.Configuration.GetConnectionString("Default");
+
+            builder.Services.AddDbContext<HotelDbContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
+            });
+
+            builder.Services.AddSerilog();
+
+            // NOTE: Optionally I could put all the services/interfaces into separate folders and use Reflection to automatically register them for Dependency Injection
+            // Logger
+
+            //
+            // Repositories
+            // 
+            builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+
+
+            //
+            // Services
+            //
+            builder.Services.AddScoped<IHotelService, HotelService>();
+
+
 
             // Add services to the container.
             builder.Services.AddControllers();

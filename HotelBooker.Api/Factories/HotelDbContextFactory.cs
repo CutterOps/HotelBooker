@@ -9,10 +9,11 @@ public class HotelDbContextFactory : IDesignTimeDbContextFactory<HotelDbContext>
     public HotelDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<HotelDbContext>();
-
+        var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
         IConfigurationRoot configRoot = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{environmentName}.json")
             .Build();
         string connectionString = configRoot.GetConnectionString("Default");
 
