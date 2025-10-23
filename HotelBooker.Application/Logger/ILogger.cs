@@ -1,4 +1,4 @@
-﻿namespace HotelBooker.Application.Logging;
+﻿namespace HotelBooker.Application.Logger;
 /// <summary>
 /// Used for logging throughout the infrastructure project.
 /// </summary>

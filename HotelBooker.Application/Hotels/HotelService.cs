@@ -1,5 +1,4 @@
 ﻿using HotelBooker.Application.Hotels.Dtos;
-using HotelBooker.Application.Interfaces;
 
 namespace HotelBooker.Application.Hotels;
 public class HotelService : IHotelService
