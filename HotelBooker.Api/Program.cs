@@ -40,13 +40,13 @@ namespace HotelBooker.Api
             
             builder.Services.AddScoped<IHotelRepository, HotelRepository>();
             builder.Services.AddScoped<IRoomTypeRepository, RoomTypeRepository>();
-
+            builder.Services.AddScoped<IRoomRepository, RoomRepository>();
             //
             // Services
             //
             builder.Services.AddScoped<IHotelService, HotelService>();
             builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
-
+            builder.Services.AddScoped<IRoomService, RoomService>();
 
             // Add services to the container.
             builder.Services.AddControllers();

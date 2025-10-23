@@ -1,7 +1,7 @@
 ﻿using HotelBooker.Application.Hotels;
 using HotelBooker.Application.Rooms;
+using HotelBooker.Application.Rooms.Dtos;
 using HotelBooker.Application.Seeding;
-using HotelBooker.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBooker.Api.Controllers;
@@ -12,14 +12,17 @@ public class HotelController : Controller
 {
     private readonly IHotelService _hotelService;
     private readonly IRoomTypeService _roomTypeService;
+    private readonly IRoomService _roomService;
     private readonly ISeeder _seeder;
     public HotelController (IHotelService hotelService,
     IRoomTypeService roomTypeService,
+    IRoomService roomService,
     ISeeder seeder) 
     {
         _hotelService = hotelService;
         _roomTypeService = roomTypeService;
         _seeder = seeder;
+        _roomService = roomService;
     }
 
     [HttpGet]
@@ -30,6 +33,13 @@ public class HotelController : Controller
         return Ok(hotel);
     }
 
+    [HttpGet("{hotelId}/AvailableRooms")]
+    public async Task<IActionResult> GetAvailableRooms([FromQuery] AvailableRoomsQuery roomQuery)
+    {
+        var availableRooms = await _roomService.GetAvailableRooms(roomQuery);
+
+        return Ok(availableRooms);
+    }
 
     [HttpGet("{hotelId}/RoomTypes")]
     public async Task<IActionResult> GetRoomTypes(Guid hotelId)
