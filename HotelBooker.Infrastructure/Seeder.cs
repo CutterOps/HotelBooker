@@ -84,8 +84,6 @@ public class Seeder : ISeeder
 
         }
 
-
-
         return true;
     }
 
@@ -96,16 +94,19 @@ public class Seeder : ISeeder
             new RoomType() {
                 Name = "Single",
                 GuestCapacity = 1,
+                PricePerNight = 10.00M,
                 HotelId = hotelId
             },
             new RoomType() {
                 Name = "Double",
                 GuestCapacity = 2,
+                PricePerNight = 50.00M,
                 HotelId = hotelId
             },
             new RoomType() {
                 Name = "Deluxe",
                 GuestCapacity = 4,
+                PricePerNight = 5.00M, // Bargain
                 HotelId = hotelId
             }
         };

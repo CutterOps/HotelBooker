@@ -12,7 +12,13 @@ public class Booking
 
     public Guid HotelId { get; set; }
 
-    public Guid CustomerId { get; set; }
+    public decimal TotalPrice { get; set; }
+    // We should consider modified date, a history of any changes
+
+    /// <summary>
+    /// We would tie this to an account.
+    /// </summary>
+    //public Guid CustomerId { get; set; }
 
     public DateTime Created { get; set; }
 

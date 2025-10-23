@@ -10,4 +10,8 @@
     <ProjectReference Include="..\HotelBooker.Domain\HotelBooker.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Rooms\" />
+  </ItemGroup>
+
 </Project>

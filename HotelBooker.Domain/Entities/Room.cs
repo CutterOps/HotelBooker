@@ -6,7 +6,11 @@ public class Room
 {
     [Key]
     public int Id { get; set; }
+    
 
+    /// <summary>
+    /// The Database size matters. This could have Max length and many others could too.
+    /// </summary>
     public string RoomNumber { get; set; }
 
     public int RoomTypeId { get; set; }
@@ -19,6 +23,6 @@ public class Room
     [ForeignKey(nameof(RoomTypeId))]
     public RoomType RoomType { get; set; }
 
-    // Uncomment when I have bookings implemented
-    //public ICollection<Booking> Bookings { get; private set; } = new List<Booking>();
+    // This could help allow hotels consider which rooms are being booked more or less...
+    public ICollection<Booking> Bookings { get; private set; } = new List<Booking>();
 }

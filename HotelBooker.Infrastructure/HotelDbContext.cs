@@ -10,6 +10,10 @@ public class HotelDbContext : DbContext
 
     public DbSet<RoomType> RoomTypes { get; set; }
 
+    public DbSet<Booking> Bookings { get; set; }
+
+    public DbSet<Guest> Guests { get; set; }
+
     public HotelDbContext(DbContextOptions<HotelDbContext> options)
         : base(options)
     {

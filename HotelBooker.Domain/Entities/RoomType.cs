@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HotelBooker.Domain.Entities;
+
 public class RoomType
 {
     [Key]
@@ -15,6 +16,8 @@ public class RoomType
     /// How many people can sleep in the room.
     /// </summary>
     public int GuestCapacity { get; set; }
+
+    public decimal PricePerNight { get; set; }
 
     [ForeignKey(nameof(HotelId))]
     public Hotel Hotel { get; set; }
