@@ -1,5 +1,7 @@
 ﻿using HotelBooker.Application.Hotels;
+using HotelBooker.Application.Rooms;
 using HotelBooker.Application.Seeding;
+using HotelBooker.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBooker.Api.Controllers;
@@ -9,11 +11,14 @@ namespace HotelBooker.Api.Controllers;
 public class HotelController : Controller
 {
     private readonly IHotelService _hotelService;
+    private readonly IRoomTypeService _roomTypeService;
     private readonly ISeeder _seeder;
     public HotelController (IHotelService hotelService,
+    IRoomTypeService roomTypeService,
     ISeeder seeder) 
     {
         _hotelService = hotelService;
+        _roomTypeService = roomTypeService;
         _seeder = seeder;
     }
 
@@ -25,8 +30,19 @@ public class HotelController : Controller
         return Ok(hotel);
     }
 
+
+    [HttpGet("{hotelId}/RoomTypes")]
+    public async Task<IActionResult> GetRoomTypes(Guid hotelId)
+    {
+        var roomTypes = await _roomTypeService.GetRoomTypes(hotelId);
+
+        return Ok(roomTypes);
+    }
+
+
+
     [HttpDelete("ResetData")]
-    public async Task<IActionResult> ResetData() 
+    public async Task<IActionResult> ResetData()
     {
         var result = await _seeder.ResetData();
 

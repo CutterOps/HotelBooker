@@ -27,7 +27,7 @@ public class HotelRepository : IHotelRepository
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error has occur looking up name: {name}");
+            _logger.LogError(e, $"Error has occured looking up name: {name}");
         }
 
         return new List<Hotel>();
