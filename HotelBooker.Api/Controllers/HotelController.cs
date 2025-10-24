@@ -1,4 +1,5 @@
-﻿using HotelBooker.Application.Bookings;
+﻿using HotelBooker.Api.Models;
+using HotelBooker.Application.Bookings;
 using HotelBooker.Application.Bookings.Dtos;
 using HotelBooker.Application.Hotels;
 using HotelBooker.Application.Rooms;
@@ -39,14 +40,18 @@ public class HotelController : Controller
     }
 
     [HttpGet("{hotelId}/AvailableRooms")]
-    public async Task<IActionResult> GetAvailableRooms([FromRoute] Guid hotelId, [FromQuery] AvailableRoomsQuery roomQuery)
+    public async Task<IActionResult> GetAvailableRooms([FromRoute] Guid hotelId, [FromQuery] AvailableRoomsModel model)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        // I hate this. This is awful. I should make models in the Api.
-        roomQuery.HotelId = hotelId;
-        var availableRooms = await _roomService.GetAvailableRooms(roomQuery);
+        var availableRooms = await _roomService.GetAvailableRooms(new AvailableRoomsQuery() 
+        {
+            HotelId = hotelId,
+            StartDate = model.StartDate,
+            EndDate = model.EndDate,
+            GuestCapacity = model.GuestCapacity
+        });
 
         return Ok(availableRooms);
     }
@@ -59,16 +64,20 @@ public class HotelController : Controller
         return Ok(roomTypes);
     }
 
-    [HttpGet("{hotelId}/BookingRequest")]
-    public async Task<IActionResult> RequestBooking([FromRoute] Guid hotelId, [FromQuery] BookingRequest request)
+    [HttpPost("{hotelId}/BookingRequest")]
+    public async Task<IActionResult> RequestBooking([FromRoute] Guid hotelId, [FromBody] BookingModel request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        request.HotelId = hotelId;
-
         
-        var result = await _bookingService.RequestBooking(request);
+        var result = await _bookingService.RequestBooking(new BookingRequest()
+        {
+            HotelId = hotelId,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
+            RoomsAndGuests = request.RoomAndGuests
+        });
 
         return Ok(result);
     }

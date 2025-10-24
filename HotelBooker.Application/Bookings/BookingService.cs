@@ -43,7 +43,11 @@ public class BookingService : IBookingService
             HotelId = request.HotelId,
             StartDate = request.StartDate,
             EndDate = request.EndDate,
-            RoomIds = request.RoomsAndGuests.Select(r => r.RoomId).ToList()
+            Rooms = request.RoomsAndGuests.Select(r => new RoomAndGuestCapacity()
+            {
+                RoomId = r.RoomId,
+                GuestCapacity = r.Guests.Count()
+            }).ToList()
         });
 
 

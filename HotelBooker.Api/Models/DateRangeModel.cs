@@ -1,17 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HotelBooker.Application.Bookings.Dtos;
-public class DateRangeDto : IValidatableObject
+namespace HotelBooker.Api.Models;
+
+public class DateRangeModel : IValidatableObject
 {
-    /// <summary>
-    /// Due to the nature of this challenge. I would have sat and designed this a bit better
-    /// I could think about checkout times etc.
-    /// </summary>
     public DateOnly StartDate { get; set; }
 
     public DateOnly EndDate { get; set; }
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    
+    protected IEnumerable<ValidationResult> ValidateDates(ValidationContext validationContext)
     {
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -20,5 +17,10 @@ public class DateRangeDto : IValidatableObject
 
         if (EndDate <= StartDate)
             yield return new ValidationResult("EndDate must be at least one day after StartDate.", new[] { nameof(EndDate) });
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        return ValidateDates(validationContext);
     }
 }

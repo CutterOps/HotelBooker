@@ -26,7 +26,7 @@ public class Booking
 
     public DateOnly EndDate { get; set; }
 
-    [ForeignKey(nameof(Booking))]
+    [ForeignKey(nameof(HotelId))]
     public Hotel Hotel { get; set; }
 
     // Navigation property

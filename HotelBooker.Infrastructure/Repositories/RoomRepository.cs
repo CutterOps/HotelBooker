@@ -40,8 +40,17 @@ public class RoomRepository : IRoomRepository
     {
         try
         {
-            var availableRooms = await GetAvailableRoomsQueryable(selectedRooms.HotelId, selectedRooms.StartDate, selectedRooms.EndDate)
-                .Where(r => selectedRooms.RoomIds.Contains(r.Id)).ToListAsync();
+            var roomIds = selectedRooms.Rooms.Select(r => r.RoomId).ToList();
+
+            var availableRooms = (await GetAvailableRoomsQueryable(
+                                    selectedRooms.HotelId,
+                                    selectedRooms.StartDate,
+                                    selectedRooms.EndDate)
+
+                                .Where(r => roomIds.Contains(r.Id))
+                                .ToListAsync())
+                                .Where(r => selectedRooms.Rooms.Any(rc => rc.RoomId == r.Id && r.RoomType.GuestCapacity >= rc.GuestCapacity))
+                                .ToList();
 
             // If the available rooms is missing any of the selected rooms we needed.
             var availableRoomIds = availableRooms.Select(r => r.Id).ToList();
