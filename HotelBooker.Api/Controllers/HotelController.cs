@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HotelBooker.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/")]
 public class HotelController : Controller
 {
     private readonly IHotelService _hotelService;

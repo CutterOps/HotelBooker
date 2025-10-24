@@ -81,13 +81,64 @@ public class Seeder : ISeeder
 
             await _context.SaveChangesAsync();
 
+            var fakingBookings = GetFakeBookings(hotel);
 
+            await _context.Bookings.AddRangeAsync(fakingBookings);
+            await _context.SaveChangesAsync();
         }
 
         return true;
     }
 
+    private List<Booking> GetFakeBookings(Hotel hotel)
+    {
+        var bookings = new List<Booking>();
+        var random = new Random();
 
+        foreach (var room in hotel.Rooms)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+
+                var startDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(random.Next(0, 10)));
+                var endDate = startDate.AddDays(random.Next(1, 8));
+
+                var bookingId = $"{hotel.BookingRef}-{DateTime.UtcNow.Ticks + i}";
+
+                var booking = new Booking
+                {
+                    Id = bookingId,
+                    HotelId = hotel.Id,
+                    Hotel = hotel,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    Created = DateTime.UtcNow,
+                    TotalPrice = (decimal)(room.RoomType.PricePerNight * (endDate.DayNumber - startDate.DayNumber)),
+                    Rooms = new List<Room> { room },
+                    Guests = new List<Guest>()
+                };
+
+
+                int guestCount = random.Next(1, room.RoomType.GuestCapacity + 1);
+                for (int g = 1; g <= guestCount; g++)
+                {
+                    booking.Guests.Add(new Guest
+                    {
+                        FirstName = $"Guest{g}_R{room.Id}_B{i}",
+                        LastName = $"Last{g}_R{room.Id}_B{i}",
+                        RoomId = room.Id,
+                        Room = room,
+                        BookingId = bookingId,
+                        Booking = booking
+                    });
+                }
+
+                bookings.Add(booking);
+            }
+        }
+
+        return bookings;
+    }
     private List<RoomType> GetDefaultRoomTypes(Guid hotelId)
     {
         return new List<RoomType>() {
