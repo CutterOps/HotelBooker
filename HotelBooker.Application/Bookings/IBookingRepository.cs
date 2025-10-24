@@ -4,5 +4,7 @@ using HotelBooker.Domain.Entities;
 namespace HotelBooker.Application.Bookings;
 public interface IBookingRepository
 {
-    public Task<bool> TryInsertBooking(Booking booking);
+    public Task<string> TryInsertBooking(Booking booking);
+
+    public Task<Booking> GetBooking(string id);
 }

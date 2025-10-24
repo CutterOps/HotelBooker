@@ -3,5 +3,7 @@
 namespace HotelBooker.Application.Bookings;
 public interface IBookingService
 {
-    public Task<bool> RequestBooking(BookingRequest request); 
+    public Task<string> RequestBooking(BookingRequest request);
+
+    public Task<BookingDetails> GetBookingDetails(string bookingId);
 }

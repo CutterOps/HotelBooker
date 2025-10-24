@@ -1,13 +1,7 @@
 ﻿using HotelBooker.Application.Bookings.Dtos;
 using HotelBooker.Application.Hotels;
 using HotelBooker.Application.Rooms;
-using HotelBooker.Application.Rooms.Dtos;
 using HotelBooker.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HotelBooker.Application.Bookings;
 public class BookingService : IBookingService
@@ -24,18 +18,47 @@ public class BookingService : IBookingService
         _hotelRepository = hotelRepository;
     }
 
+    public async Task<BookingDetails> GetBookingDetails(string bookingId)
+    {
+        var booking = await _bookingRepository.GetBooking(bookingId);
+
+        if (booking == null)
+        {
+            return null;
+        }
+        int nights = booking.EndDate.DayNumber - booking.StartDate.DayNumber;
+
+        return new BookingDetails()
+        {
+            TotalPrice = booking.TotalPrice,
+            TotalNights = nights,
+            HotelName = booking.Hotel.Name,
+            RoomDetails = booking.Rooms.Select(r => new BookingRoomDetails()
+            {
+                RoomTypeName = r.RoomType.Name,
+                TotalPrice = r.RoomType.PricePerNight * nights,
+                Guests = booking.Guests.Where(g => g.RoomId == r.Id).Select(g =>
+                new RoomGuest()
+                {
+                    FirstName = g.FirstName,
+                    LastName = g.LastName
+                }).ToList()
+            }).ToList()
+        };
+    }
+
     /// <summary>
     /// If I had more time on this I would look into a better way of giving a clearer result as to why the booking failed.
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    public async Task<bool> RequestBooking(BookingRequest request)
+    public async Task<string> RequestBooking(BookingRequest request)
     {
         var hotelBookingRefPrefix = await _hotelRepository.GetHotelRef(request.HotelId);
 
         if (string.IsNullOrWhiteSpace(hotelBookingRefPrefix))
         {
-            return false;
+            return null;
         }
         // if this is null the rooms are not available
         var availableRooms = await _roomRepository.GetSelectedAvailableRooms(new SelectedRoomsAvailability()
@@ -53,13 +76,13 @@ public class BookingService : IBookingService
 
         if (availableRooms == null)
         {
-            return false;
+            return null;
         }
 
         int nights = request.EndDate.DayNumber - request.StartDate.DayNumber;
         var totalPrice = 0.00M;
-        availableRooms.ForEach(r => totalPrice = r.RoomType.PricePerNight * nights);
-        var bookingId = hotelBookingRefPrefix + DateTime.UtcNow.Ticks.ToString();
+        availableRooms.ForEach(r => totalPrice += r.RoomType.PricePerNight * nights);
+        var bookingId = $"{hotelBookingRefPrefix}-{ DateTime.UtcNow.Ticks.ToString()}";
         var booking = new Booking()
         {
             Id = bookingId, // Theres many ways to do this.. this for now is the most unique for multiple hotels and customers in the same hotel

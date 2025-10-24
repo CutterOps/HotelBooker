@@ -64,6 +64,9 @@ public class HotelController : Controller
         return Ok(roomTypes);
     }
 
+    /// <summary>
+    /// This can be designed in different ways. We could keep the HotelId as part of the query in Gets and put it in the body as well.
+    /// </summary>
     [HttpPost("{hotelId}/BookingRequest")]
     public async Task<IActionResult> RequestBooking([FromRoute] Guid hotelId, [FromBody] BookingModel request)
     {
@@ -80,6 +83,16 @@ public class HotelController : Controller
         });
 
         return Ok(result);
+    }
+
+    /// <summary>
+    /// Should be in a separate controller... could then have /BookingRequest as /Booking/Request and put hotelid as part of the body.
+    /// Just showing variation.
+    /// </summary>
+    [HttpGet("~/Booking/{bookingId}")]
+    public async Task<IActionResult> GetBooking([FromRoute] string bookingId)
+    {
+        return Ok(await _bookingService.GetBookingDetails(bookingId));
     }
 
 
