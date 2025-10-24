@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace HotelBooker.Application.Bookings.Dtos;
+﻿namespace HotelBooker.Application.Bookings.Dtos;
 public class SelectedRoomsAvailability
 {
     public Guid HotelId { get; set; }

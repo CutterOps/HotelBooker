@@ -2,8 +2,6 @@
 using HotelBooker.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace HotelBooker.Infrastructure;
 public class Seeder : ISeeder

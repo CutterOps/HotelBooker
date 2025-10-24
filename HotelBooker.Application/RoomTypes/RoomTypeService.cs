@@ -1,6 +1,5 @@
 ﻿using HotelBooker.Application.Rooms.Dtos;
 using HotelBooker.Application.RoomTypes;
-using System.Runtime.CompilerServices;
 
 namespace HotelBooker.Application.Rooms;
 public class RoomTypeService : IRoomTypeService

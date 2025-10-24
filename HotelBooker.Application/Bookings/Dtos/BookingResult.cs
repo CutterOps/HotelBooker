@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HotelBooker.Application.Bookings.Dtos;
+﻿namespace HotelBooker.Application.Bookings.Dtos;
 public class BookingResult
 {
     public Guid HotelId { get; set; }
