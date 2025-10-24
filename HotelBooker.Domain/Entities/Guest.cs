@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HotelBooker.Domain.Entities;
 
@@ -7,6 +8,7 @@ namespace HotelBooker.Domain.Entities;
 /// </summary>
 public class Guest
 {
+    [Key]
     public int Id { get; set; }
 
     public string FirstName { get; set; }

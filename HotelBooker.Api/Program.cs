@@ -1,3 +1,4 @@
+using HotelBooker.Application.Bookings;
 using HotelBooker.Application.Hotels;
 using HotelBooker.Application.Rooms;
 using HotelBooker.Application.RoomTypes;
@@ -37,13 +38,14 @@ namespace HotelBooker.Api
             //
             // Repositories
             // 
-            
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
             builder.Services.AddScoped<IHotelRepository, HotelRepository>();
             builder.Services.AddScoped<IRoomTypeRepository, RoomTypeRepository>();
             builder.Services.AddScoped<IRoomRepository, RoomRepository>();
             //
             // Services
             //
+            builder.Services.AddScoped<IBookingService, BookingService>();
             builder.Services.AddScoped<IHotelService, HotelService>();
             builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
             builder.Services.AddScoped<IRoomService, RoomService>();

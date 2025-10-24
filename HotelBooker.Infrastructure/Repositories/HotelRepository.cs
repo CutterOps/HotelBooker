@@ -15,6 +15,22 @@ public class HotelRepository : IHotelRepository
         _logger = logger;
     }
 
+    public async Task<string> GetHotelRef(Guid hotelId)
+    {
+        try
+        {
+            var hotel = await _context.Hotels
+                                          .SingleOrDefaultAsync(h => h.Id == hotelId);
+
+            return hotel.BookingRef;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error has occured looking up Id: {hotelId}");
+        }
+
+        return null;
+    }
     public async Task<IEnumerable<Hotel>> GetAllLikeName(string name)
     {
         try
@@ -28,6 +44,22 @@ public class HotelRepository : IHotelRepository
         catch (Exception e)
         {
             _logger.LogError(e, $"Error has occured looking up name: {name}");
+        }
+
+        return new List<Hotel>();
+    }
+
+    public async Task<IEnumerable<Hotel>> GetAll()
+    {
+        try
+        {
+            var hotels = await _context.Hotels.ToListAsync();
+
+            return hotels;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error has occured retrieving all the hotels");
         }
 
         return new List<Hotel>();

@@ -1,4 +1,5 @@
 ﻿using HotelBooker.Application.Hotels.Dtos;
+using HotelBooker.Domain.Entities;
 
 namespace HotelBooker.Application.Hotels;
 public class HotelService : IHotelService
@@ -9,17 +10,31 @@ public class HotelService : IHotelService
     {
         _hotelRepository = hotelRepository;
     }
+
+    /// <summary>
+    /// Depending how many hotels there are. Pagination would be a good idea here.
+    /// </summary>
     public async Task<List<HotelPreviewDto>> GetHotelPreviewsWithName(string name)
     {
-        var hotelPreviews = await _hotelRepository.GetAllLikeName(name);
+        IEnumerable<Hotel> hotels;
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            hotels = await _hotelRepository.GetAll(); 
+        }
+        else
+        {
+            hotels = await _hotelRepository.GetAllLikeName(name);
+        }
+         
 
         // Return empty list if an error has occured
-        if (hotelPreviews == null)
+        if (hotels == null)
         {
             return new List<HotelPreviewDto>();
         }
 
-        return hotelPreviews.Select(x => new HotelPreviewDto()
+        return hotels.Select(x => new HotelPreviewDto()
         {
             Id = x.Id,
             Name = x.Name,
